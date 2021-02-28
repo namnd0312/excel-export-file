@@ -2,6 +2,7 @@ package com.namnd.exportexcel.services;
 
 import com.namnd.exportexcel.dtos.UserDto;
 import com.namnd.exportexcel.models.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface UserService {
     List<UserDto> getList();
 
     List<User> getAll();
+
+    void save(MultipartFile file);
 }

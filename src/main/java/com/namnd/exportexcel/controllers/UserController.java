@@ -1,6 +1,7 @@
 package com.namnd.exportexcel.controllers;
 
 import com.namnd.exportexcel.dtos.UserDto;
+import com.namnd.exportexcel.models.ExcelHelper;
 import com.namnd.exportexcel.models.User;
 import com.namnd.exportexcel.models.UserExcelExporter;
 import com.namnd.exportexcel.services.UserService;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.service.ResponseMessage;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -56,5 +59,26 @@ public class UserController {
         UserExcelExporter excelExporter = new UserExcelExporter(listUsers);
 
         excelExporter.export(response);
+    }
+
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        String message = "";
+
+        if (ExcelHelper.hasExcelFormat(file)) {
+            try {
+                userService.save(file);
+
+                message = "Uploaded the file successfully: " + file.getOriginalFilename();
+                return ResponseEntity.status(HttpStatus.OK).body(message);
+            } catch (Exception e) {
+                message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+            }
+        }
+
+        message = "Please upload an excel file!";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
     }
 }

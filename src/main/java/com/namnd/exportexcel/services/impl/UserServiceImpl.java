@@ -2,12 +2,15 @@ package com.namnd.exportexcel.services.impl;
 
 import com.namnd.exportexcel.dtos.UserDto;
 import com.namnd.exportexcel.mapper.UserMapper;
+import com.namnd.exportexcel.models.ExcelHelper;
 import com.namnd.exportexcel.models.User;
 import com.namnd.exportexcel.repositories.UserRepository;
 import com.namnd.exportexcel.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,5 +46,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return this.userRepository.findAll();
+    }
+
+    @Override
+    public void save(MultipartFile file) {
+        try {
+            List<User> tutorials = ExcelHelper.excelToUsers(file.getInputStream());
+            userRepository.saveAll(tutorials);
+        } catch (IOException e) {
+            throw new RuntimeException("fail to store excel data: " + e.getMessage());
+        }
     }
 }
