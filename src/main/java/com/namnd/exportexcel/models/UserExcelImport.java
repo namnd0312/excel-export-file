@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author nam.nd
  * @created 28/02/2021 - 10:34 PM
  */
-public class ExcelHelper {
+public class UserExcelImport {
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] HEADERs = { "User ID", "E-mail", "age", "sex", "phone" };
     static String SHEET = "Users";

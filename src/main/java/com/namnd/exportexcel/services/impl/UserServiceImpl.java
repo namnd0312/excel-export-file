@@ -2,7 +2,7 @@ package com.namnd.exportexcel.services.impl;
 
 import com.namnd.exportexcel.dtos.UserDto;
 import com.namnd.exportexcel.mapper.UserMapper;
-import com.namnd.exportexcel.models.ExcelHelper;
+import com.namnd.exportexcel.models.UserExcelImport;
 import com.namnd.exportexcel.models.User;
 import com.namnd.exportexcel.repositories.UserRepository;
 import com.namnd.exportexcel.services.UserService;
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(MultipartFile file) {
         try {
-            List<User> tutorials = ExcelHelper.excelToUsers(file.getInputStream());
+            List<User> tutorials = UserExcelImport.excelToUsers(file.getInputStream());
             userRepository.saveAll(tutorials);
         } catch (IOException e) {
             throw new RuntimeException("fail to store excel data: " + e.getMessage());
